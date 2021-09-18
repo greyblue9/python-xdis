@@ -5,8 +5,24 @@
 # remake --tasks to shows the targets and the comments
 
 GIT2CL ?= git2cl
-PYTHON ?= python
 PYTHON3 ?= python3
+PYTHON := $(PYTHON3)
+export PYTHON
+export PYTHON3
+this_makefile := $(shell realpath $(MAKEFILE_LIST))
+this_makefile_dir := $(subst /$(notdir $(this_makefile)),,$(this_makefile))
+$(warning this_makefile == $(this_makefile))
+$(warning this_makefile_dir == $(this_makefile_dir))
+$(info initial PYTHONPATH == $(PYTHONPATH))
+ifneq ($(PYTHONPATH),)
+  PYTHONPATH := $(this_makefile_dir):$(PYTHONPATH)
+else
+  PYTHONPATH := $(this_makefile_dir)
+endif
+export PYTHONPATH
+$(warning new PYTHONPATH == $(PYTHONPATH))
+
+
 RM      ?= rm
 LINT    = flake8
 
